@@ -3,13 +3,20 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:docker": "docker-compose --env-file ./.env -f ./docker/docker-compose.yml up -d",
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:init": "npm run prisma:generate && npm run prisma:migrate"
   },
   "keywords": [],
-  "author": "",
+  "author": "@Fredray-21",
   "license": "ISC",
   "description": "",
   "devDependencies": {
     "prisma": "^5.22.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0"
   }
 }

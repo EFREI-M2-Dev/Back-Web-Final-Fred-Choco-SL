@@ -1,0 +1,18 @@
+model Task {
+  id          Int
+  name        String
+  description String?
+  status      Status    @relation(fields: [statusId], references: [id])
+  statusId    Int
+  project     Project   @relation(fields: [projectId], references: [id])
+  projectId   Int
+  assignee    User?     @relation(fields: [assigneeId], references: [id], name: "assignee")
+  assigneeId  Int?
+  creator     User      @relation(fields: [creatorId], references: [id], name: "creator")
+  creatorId   Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  tags        TaskTag[]
+
+  @@id([projectId, id])
+}

@@ -1,0 +1,11 @@
+model TaskTag {
+  task          Task @relation(fields: [taskProjectId, taskId], references: [projectId, id])
+  taskProjectId Int
+  taskId        Int
+
+  tag          Tag @relation(fields: [tagProjectId, tagId], references: [projectId, id])
+  tagProjectId Int
+  tagId        Int
+
+  @@id([taskProjectId, taskId, tagProjectId, tagId])
+}

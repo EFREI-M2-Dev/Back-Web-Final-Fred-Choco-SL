@@ -1,0 +1,7 @@
+model Status {
+  id        Int      @id @default(autoincrement())
+  name      String
+  tasks     Task[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

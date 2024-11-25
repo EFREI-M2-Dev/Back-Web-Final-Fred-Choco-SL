@@ -1,0 +1,13 @@
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  name     String?
+  surname  String?
+  password String
+
+  projects      Project[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  createdTasks  Task[]    @relation("creator")
+  assignedTasks Task[]    @relation("assignee")
+}

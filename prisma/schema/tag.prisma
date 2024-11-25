@@ -1,0 +1,12 @@
+model Tag {
+  id        Int
+  name      String
+  project   Project   @relation(fields: [projectId], references: [id])
+  projectId Int
+  taskTags  TaskTag[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([id, projectId])
+}

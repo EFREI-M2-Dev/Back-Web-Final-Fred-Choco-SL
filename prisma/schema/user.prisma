@@ -1,8 +1,8 @@
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  name     String?
-  surname  String?
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  name     String
+  surname  String
   password String
 
   projects      Project[]

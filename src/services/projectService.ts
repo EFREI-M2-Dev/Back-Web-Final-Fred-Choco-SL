@@ -51,3 +51,15 @@ export const deleteProject = async (projectId: number) => {
         },
     });
 };
+
+export const getProjectById = async (projectId: number) => {
+    return prisma.project.findUnique({
+        where: {
+            id: projectId,
+        },
+        include: {
+            tasks: true,
+            tags: true,
+        },
+    });
+}

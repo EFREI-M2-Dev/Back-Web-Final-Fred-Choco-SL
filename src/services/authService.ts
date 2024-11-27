@@ -5,27 +5,29 @@ import jwt from "jsonwebtoken";
 const prisma = PrismaSingleton.getInstance();
 const JWT_SECRET = process.env["JWT_SECRET"];
 
-if(!JWT_SECRET) {
+if (!JWT_SECRET) {
     throw new Error("JWT_SECRET is not defined");
 }
 
-export const registerUser = async (email: string, password: string, name: string) => {
+export const registerUser = async (email: string, password: string, name: string, surname: string) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
         data: {
+            name,
+            surname,
             email,
             password: hashedPassword,
         },
     });
 
     // Génère un token pour l'utilisateur nouvellement inscrit
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
-    return { user, token };
+    const token = jwt.sign({id: user.id, email: user.email}, JWT_SECRET, {expiresIn: "1h"});
+    return {user, token};
 };
 
 export const loginUser = async (email: string, password: string) => {
     const user = await prisma.user.findUnique({
-        where: { email },
+        where: {email},
     });
 
     if (!user) {
@@ -38,6 +40,6 @@ export const loginUser = async (email: string, password: string) => {
     }
 
     // Génère un token pour l'utilisateur connecté
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
-    return { user, token };
+    const token = jwt.sign({id: user.id, email: user.email}, JWT_SECRET, {expiresIn: "1h"});
+    return {user, token};
 };

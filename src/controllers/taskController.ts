@@ -23,7 +23,12 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
         const { projectId } = req.params;
         const { name, description, statusId } = req.body;
 
-        const task = await addTask(Number(projectId), name, description, statusId);
+        if(!req.user) {
+            res.status(401).json({ error: "Unauthorized" });
+            return;
+        }
+
+        const task = await addTask(Number(projectId), name, description, statusId, req.user.id);
         res.status(201).json(task);
     } catch (error: any) {
         res.status(500).json({ error: error.message });
@@ -32,10 +37,10 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
 
 export const updateTask = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { taskID } = req.params;
+        const { taskID, projectId } = req.params;
         const { name, description, statusId } = req.body;
 
-        const task = await modifyTask(Number(taskID), name, description, statusId);
+        const task = await modifyTask(Number(projectId), Number(taskID), name, description, statusId );
         res.status(200).json(task);
     } catch (error: any) {
         res.status(500).json({ error: error.message });
@@ -44,9 +49,9 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
 
 export const deleteTask = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { taskID } = req.params;
+        const { taskID, projectId } = req.params;
 
-        await removeTask(Number(taskID));
+        await removeTask(Number(taskID), Number(projectId));
         res.status(200).json({ message: "Task deleted successfully" });
     } catch (error: any) {
         res.status(500).json({ error: error.message });
@@ -55,9 +60,9 @@ export const deleteTask = async (req: Request, res: Response): Promise<void> => 
 
 export const getTaskById = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { taskID } = req.params;
+        const { taskID, projectId } = req.params;
 
-        const task = await getTask(Number(taskID));
+        const task = await getTask(Number(taskID), Number(projectId));
         res.status(200).json(task);
     } catch (error: any) {
         res.status(500).json({ error: error.message });

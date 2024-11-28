@@ -7,8 +7,9 @@ const router = Router();
 // Routes pour les tâches
 router.get("/:projectId/tasks", authenticate, getProjectTasks);
 router.post("/:projectId/task", authenticate, createTask);
-router.put("/tasks/:taskID", authenticate, updateTask);
-router.delete("/tasks/:taskID", authenticate, deleteTask);
-router.get("/tasks/:taskID", authenticate, getTaskById);
+
+router.put("/:projectId/tasks/:taskID", authenticate, updateTask);
+router.delete("/:projectId/tasks/:taskID", authenticate, deleteTask);
+router.get("/:projectId/tasks/:taskID", authenticate, getTaskById);
 
 export default router;

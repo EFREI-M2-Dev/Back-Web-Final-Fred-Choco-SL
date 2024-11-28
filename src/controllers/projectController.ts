@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {
     getUserProjects as fetchProjects,
+    getProjectById as fetchProjectById,
     createProject as addProject,
     updateProject as modifyProject,
     deleteProject as removeProject,
@@ -101,6 +102,25 @@ export const deleteProject = async (req: Request, res: Response): Promise<void> 
         res.status(200).json({
             message: "Project deleted successfully",
         });
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+export const getProjectById = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { projectId } = req.params;
+
+        const parsedProjectId = Number(projectId);
+
+        if (isNaN(parsedProjectId)) {
+            res.status(400).json({ error: "Valid project ID is required" });
+            return;
+        }
+
+        const project = await fetchProjectById(parsedProjectId);
+
+        res.status(200).json(project);
     } catch (error: any) {
         res.status(500).json({ error: error.message });
     }

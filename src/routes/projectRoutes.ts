@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authenticate } from "../middlewares/authMiddleware";
-import {createProject, deleteProject, getUserProjects, updateProject} from "../controllers/projectController";
+import { createProject, deleteProject, getUserProjects, updateProject, getProjectById } from "../controllers/projectController";
 
 const router = Router();
 
@@ -11,5 +11,6 @@ router.delete("/projects/:projectId", authenticate, deleteProject);
 
 // Route protégée : récupérer les projets de l'utilisateur
 router.get("/:userId/projects", authenticate, getUserProjects);
+router.get("/projects/:projectId", authenticate, getProjectById);
 
 export default router;

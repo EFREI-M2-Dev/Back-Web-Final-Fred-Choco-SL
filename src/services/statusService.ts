@@ -15,8 +15,6 @@ export const getStatusesByProjectId = async (projectId: number) => {
 };
 
 export const createStatus = async (projectId: number, name: string) => {
-    // Note: Si les statuts ne sont pas liés directement aux projets,
-    // utilisez simplement `name`.
     return prisma.status.create({
         data: {
             name,
@@ -42,3 +40,8 @@ export const deleteStatus = async (projectId: number, statusId: number) => {
         },
     });
 };
+
+
+export const getAllStatuses = async () => {
+    return prisma.status.findMany();
+}

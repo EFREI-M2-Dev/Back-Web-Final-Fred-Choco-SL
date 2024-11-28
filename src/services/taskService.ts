@@ -22,20 +22,33 @@ export const createTask = async (
     projectId: number,
     name: string,
     description: string | null,
-    statusId: number
+    statusId: number,
+    creatorId: number
 ) => {
+    const maxId = await prisma.task.findFirst({
+        where: { projectId },
+        orderBy: { id: 'desc' },
+        select: { id: true },   
+    });
+
+    // Calculer le nouvel ID
+    const newId = (maxId?.id || 0) + 1;
+
     return prisma.task.create({
         data: {
+            id: newId,
             projectId,
             name,
             description,
             statusId,
-            creatorId: 1, // À remplacer par `req.user.id` depuis le contrôleur
+            creatorId,
+            assigneeId: creatorId
         },
     });
 };
 
 export const updateTask = async (
+    projectId: number,
     taskId: number,
     name: string,
     description: string | null,
@@ -43,7 +56,7 @@ export const updateTask = async (
 ) => {
     return prisma.task.update({
         where: {
-            id: taskId,
+            projectId_id: { projectId, id: taskId },
         },
         data: {
             name,
@@ -53,18 +66,18 @@ export const updateTask = async (
     });
 };
 
-export const deleteTask = async (taskId: number) => {
+export const deleteTask = async (taskId: number, projectId: number,) => {
     return prisma.task.delete({
         where: {
-            id: taskId,
+            projectId_id: { projectId, id: taskId },
         },
     });
 };
 
-export const getTask = async (taskId: number) => {
+export const getTask = async (taskId: number, projectId: number,) => {
     return prisma.task.findUnique({
         where: {
-            id: taskId,
+            projectId_id: { projectId, id: taskId },
         },
         include: {
             tags: {

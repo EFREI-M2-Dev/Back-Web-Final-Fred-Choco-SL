@@ -86,6 +86,7 @@ export const getTask = async (taskId: number, projectId: number,) => {
                 },
             },
             status: true,
+            assignee: true,
         },
     });
 };

@@ -6,22 +6,13 @@ const router = Router();
 
 /**
  * @swagger
- * /api/{projectId}/tags:
+ * /api/statuses:
  *   get:
- *     summary: Récupérer les tags d'un projet
- *     description: Renvoie une liste des tags associés à un projet spécifique.
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: projectId
- *         required: true
- *         schema:
- *           type: string
- *         description: ID du projet
+ *     summary: Récupérer tous les statuts
+ *     description: Renvoie une liste de tous les statuts disponibles.
  *     responses:
  *       200:
- *         description: Liste des tags récupérée avec succès.
+ *         description: Liste des statuts récupérée avec succès.
  *         content:
  *           application/json:
  *             schema:
@@ -30,55 +21,85 @@ const router = Router();
  *                 type: object
  *                 properties:
  *                   id:
- *                     type: string
- *                     example: "1"
+ *                     type: integer
+ *                     example: 1
  *                   name:
  *                     type: string
- *                     example: "Urgent"
- *       401:
- *         description: Non authentifié.
+ *                     example: "En cours"
+ *       500:
+ *         description: Erreur serveur.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
  */
 router.get("/:projectId/tags", authenticate, getTags);
 
 /**
  * @swagger
- * /api/{projectId}/tag:
- *   post:
- *     summary: Créer un tag pour un projet
- *     description: Ajoute un nouveau tag à un projet spécifique.
- *     security:
- *       - bearerAuth: []
+ * /api/{projectId}/statuses:
+ *   get:
+ *     summary: Récupérer les statuts d'un projet
+ *     description: Renvoie une liste des statuts associés à un projet spécifique.
  *     parameters:
  *       - in: path
  *         name: projectId
  *         required: true
  *         schema:
- *           type: string
+ *           type: integer
  *         description: ID du projet
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: "Important"
  *     responses:
- *       201:
- *         description: Tag créé avec succès.
- *       401:
- *         description: Non authentifié.
+ *       200:
+ *         description: Liste des statuts récupérée avec succès.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   name:
+ *                     type: string
+ *                     example: "En cours"
+ *                   projectId:
+ *                     type: integer
+ *                     example: 101
+ *       404:
+ *         description: Projet introuvable.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Project not found"
+ *       500:
+ *         description: Erreur serveur.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
  */
 router.post("/:projectId/tag", authenticate, createTag);
 
 /**
  * @swagger
- * /api/{projectId}/tags/{tagsId}:
- *   put:
- *     summary: Mettre à jour un tag d'un projet
- *     description: Modifie les détails d'un tag spécifique associé à un projet.
+ * /api/{projectId}/status:
+ *   post:
+ *     summary: Créer un statut pour un projet
+ *     description: Ajoute un nouveau statut à un projet spécifique.
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -86,14 +107,8 @@ router.post("/:projectId/tag", authenticate, createTag);
  *         name: projectId
  *         required: true
  *         schema:
- *           type: string
+ *           type: integer
  *         description: ID du projet
- *       - in: path
- *         name: tagsId
- *         required: true
- *         schema:
- *           type: string
- *         description: ID du tag à mettre à jour
  *     requestBody:
  *       required: true
  *       content:
@@ -103,23 +118,55 @@ router.post("/:projectId/tag", authenticate, createTag);
  *             properties:
  *               name:
  *                 type: string
- *                 example: "Très important"
+ *                 example: "En cours"
  *     responses:
- *       200:
- *         description: Tag mis à jour avec succès.
- *       404:
- *         description: Tag ou projet introuvable.
+ *       201:
+ *         description: Statut créé avec succès.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   example: 1
+ *                 name:
+ *                   type: string
+ *                   example: "En cours"
+ *                 projectId:
+ *                   type: integer
+ *                   example: 101
+ *       400:
+ *         description: Données invalides.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Status name is required"
  *       401:
  *         description: Non authentifié.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unauthorized"
+ *       500:
+ *         description: Erreur serveur.
  */
 router.put("/:projectId/tags/:tagsId", authenticate, updateTag);
 
 /**
  * @swagger
- * /api/{projectId}/tags/{tagsId}:
+ * /api/{projectId}/statuses/{statusesId}:
  *   delete:
- *     summary: Supprimer un tag d'un projet
- *     description: Supprime un tag spécifique associé à un projet.
+ *     summary: Supprimer un statut d'un projet
+ *     description: Supprime un statut spécifique associé à un projet.
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -127,21 +174,37 @@ router.put("/:projectId/tags/:tagsId", authenticate, updateTag);
  *         name: projectId
  *         required: true
  *         schema:
- *           type: string
+ *           type: integer
  *         description: ID du projet
  *       - in: path
- *         name: tagsId
+ *         name: statusesId
  *         required: true
  *         schema:
- *           type: string
- *         description: ID du tag à supprimer
+ *           type: integer
+ *         description: ID du statut à supprimer
  *     responses:
  *       200:
- *         description: Tag supprimé avec succès.
+ *         description: Statut supprimé avec succès.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Status deleted successfully"
  *       404:
- *         description: Tag ou projet introuvable.
- *       401:
- *         description: Non authentifié.
+ *         description: Statut ou projet introuvable.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Status or project not found"
+ *       500:
+ *         description: Erreur serveur.
  */
 router.delete("/:projectId/tags/:tagsId", authenticate, deleteTag);
 

@@ -28,9 +28,61 @@ const router = Router();
  *     responses:
  *       201:
  *         description: Projet créé avec succès.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Project created successfully"
+ *                 project:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "12345"
+ *                     name:
+ *                       type: string
+ *                       example: "Nouveau Projet"
+ *                     description:
+ *                       type: string
+ *                       example: "Description du projet"
+ *                     userId:
+ *                       type: string
+ *                       example: "67890"
+ *       400:
+ *         description: Données invalides.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Name and description are required"
  *       401:
  *         description: Utilisateur non authentifié.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unauthorized"
+ *       500:
+ *         description: Erreur serveur.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
  */
+
 router.post("/project", authenticate, createProject);
 
 /**
@@ -64,11 +116,68 @@ router.post("/project", authenticate, createProject);
  *     responses:
  *       200:
  *         description: Projet mis à jour avec succès.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Project updated successfully"
+ *                 project:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 1
+ *                     name:
+ *                       type: string
+ *                       example: "Projet mis à jour"
+ *                     description:
+ *                       type: string
+ *                       example: "Nouvelle description"
+ *       400:
+ *         description: Requête invalide.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Name and description are required"
  *       404:
  *         description: Projet introuvable.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Project not found"
  *       401:
  *         description: Utilisateur non authentifié.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unauthorized"
+ *       500:
+ *         description: Erreur serveur.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
  */
+
 router.put("/projects/:projectId", authenticate, updateProject);
 
 /**
@@ -89,11 +198,56 @@ router.put("/projects/:projectId", authenticate, updateProject);
  *     responses:
  *       200:
  *         description: Projet supprimé avec succès.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Project deleted successfully"
+ *       400:
+ *         description: ID du projet invalide.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Valid project ID is required"
  *       404:
  *         description: Projet introuvable.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Project not found"
  *       401:
  *         description: Utilisateur non authentifié.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unauthorized"
+ *       500:
+ *         description: Erreur serveur.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
  */
+
 router.delete("/projects/:projectId", authenticate, deleteProject);
 
 /**
@@ -114,11 +268,44 @@ router.delete("/projects/:projectId", authenticate, deleteProject);
  *     responses:
  *       200:
  *         description: Liste des projets récupérée avec succès.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   name:
+ *                     type: string
+ *                     example: "Mon projet"
+ *                   description:
+ *                     type: string
+ *                     example: "Description du projet"
+ *                   userId:
+ *                     type: integer
+ *                     example: 123
+ *       400:
+ *         description: ID utilisateur invalide.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Valid user ID is required"
  *       404:
- *         description: Utilisateur ou projets introuvables.
- *       401:
- *         description: Utilisateur non authentifié.
- */
+ *         description: Aucun projet trouvé pour cet utilisateur.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error
+*/
 router.get("/:userId/projects", authenticate, getUserProjects);
 
 /**
@@ -139,10 +326,63 @@ router.get("/:userId/projects", authenticate, getUserProjects);
  *     responses:
  *       200:
  *         description: Projet récupéré avec succès.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   example: 1
+ *                 name:
+ *                   type: string
+ *                   example: "Projet Exemple"
+ *                 description:
+ *                   type: string
+ *                   example: "Description du projet exemple"
+ *                 userId:
+ *                   type: integer
+ *                   example: 123
+ *       400:
+ *         description: ID du projet invalide.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Valid project ID is required"
  *       404:
  *         description: Projet introuvable.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Project not found"
  *       401:
  *         description: Utilisateur non authentifié.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unauthorized"
+ *       500:
+ *         description: Erreur serveur.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
  */
 router.get("/projects/:projectId", authenticate, getProjectById);
 

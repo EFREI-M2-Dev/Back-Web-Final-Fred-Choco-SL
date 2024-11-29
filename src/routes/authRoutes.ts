@@ -53,7 +53,10 @@ router.post("/login", login);
  *             properties:
  *               name:
  *                 type: string
- *                 example: "John Doe"
+ *                 example: "John"
+ *               surname:
+ *                 type: string
+ *                 example: "Doe"
  *               email:
  *                 type: string
  *                 example: "user@example.com"
@@ -68,18 +71,39 @@ router.post("/login", login);
  *             schema:
  *               type: object
  *               properties:
- *                 id:
+ *                 message:
  *                   type: string
- *                   example: "1"
- *                 name:
+ *                   example: "User registered"
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "1"
+ *                     name:
+ *                       type: string
+ *                       example: "John"
+ *                     surname:
+ *                       type: string
+ *                       example: "Doe"
+ *                     email:
+ *                       type: string
+ *                       example: "user@example.com"
+ *                 token:
  *                   type: string
- *                   example: "John Doe"
- *                 email:
- *                   type: string
- *                   example: "user@example.com"
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5..."
  *       400:
  *         description: Données invalides.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Invalid email or password"
  */
+
 router.post("/register", register);
 
 export default router;

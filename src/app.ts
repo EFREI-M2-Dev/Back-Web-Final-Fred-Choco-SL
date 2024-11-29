@@ -6,12 +6,16 @@ import projectRoutes from "./routes/projectRoutes";
 import statusRoutes from "./routes/statusRoutes";
 import tagRoutes from "./routes/tagRoutes";
 import taskRoutes from "./routes/taskRoutes";
+import {useSwagger} from "./swagger/swagger.module";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
+
+// Intégration de Swagger
+useSwagger(app);
 
 app.use("/api", authRoutes);
 app.use("/api", projectRoutes);
